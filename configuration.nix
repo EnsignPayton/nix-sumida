@@ -23,6 +23,7 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+  networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
 
   # Set your time zone.
   time.timeZone = "America/Chicago";
@@ -42,6 +43,13 @@
     LC_TIME = "en_US.UTF-8";
   };
 
+  # Enable OpenGL
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+  };
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
@@ -54,6 +62,28 @@
     layout = "us";
     xkbVariant = "";
   };
+
+  # Configure nvidia driver
+  services.xserver.videoDrivers = ["nvidia"];
+
+  hardware.nvidia = {
+    modesetting.enable = true;
+    # TODO: Maybe set this to true
+    powerManagement.enable = false;
+    # Use open source kernel module - apparently it's still buggy, so false to use proprietary
+    open = false;
+    nvidiaSettings = true;
+
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+
+    prime = {
+      sync.enable = true;
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:1:0:0";
+    };
+  };
+
+  services.flatpak.enable = true;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -98,10 +128,16 @@
     git
     gnupg
     pinentry
+    wine
+    lutris
+    discord
+    anki-bin
+    rustup
   ];
 
   # See https://github.com/NixOS/nixpkgs/commit/3d832dee59ed0338db4afb83b4c481a062163771
   programs.gnupg.agent.enable = true;
+  programs.steam.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
