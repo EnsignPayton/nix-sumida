@@ -133,6 +133,9 @@
     discord
     anki-bin
     rustup
+    gcc
+    gnumake
+    tmux
   ];
 
   # See https://github.com/NixOS/nixpkgs/commit/3d832dee59ed0338db4afb83b4c481a062163771
