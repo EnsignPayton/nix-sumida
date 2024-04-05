@@ -23,7 +23,16 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-  networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
+  networking.networkmanager.dns = "systemd-resolved";
+  networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
+
+  services.resolved = {
+    enable = true;
+    dnssec = "true";
+    domains = [ "~." ];
+    fallbackDns = [ "1.1.1.1" "1.0.0.1" ];
+    dnsovertls = "true";
+  };
 
   # Set your time zone.
   time.timeZone = "America/Chicago";
@@ -58,9 +67,9 @@
   services.xserver.desktopManager.plasma5.enable = true;
 
   # Configure keymap in X11
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "us";
-    xkbVariant = "";
+    variant = "";
   };
 
   # Configure nvidia driver
@@ -128,6 +137,7 @@
     git
     gnupg
     pinentry
+    bottles
     wine
     lutris
     discord
